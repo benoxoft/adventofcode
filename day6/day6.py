@@ -6,19 +6,21 @@ def key(x, y):
 
 def turn_on(x, y):
     k = key(x, y)
-    lights[key(x, y)] = True
+    if lights.has_key(k):
+        lights[k] += 1
+    else:
+        lights[k] = 1
 
 def turn_off(x, y):
     k = key(x, y)
     if lights.has_key(k):
-        del lights[k]
+        lights[k] -= 1
+        if lights[k] == 0:
+            del lights[k]
 
 def toggle(x, y):
-    k = key(x, y)
-    if lights.has_key(k):
-        turn_off(x, y)
-    else:
-        turn_on(x, y)
+    turn_on(x, y)
+    turn_on(x, y)
 
 functions = {"turn on": turn_on, "turn off": turn_off, "toggle": toggle}
 
@@ -36,13 +38,13 @@ def execute_command(command):
 def read_data(filename):
     lines = open(filename, "r").readlines()
     return lines
-                    
+
 def main():
     lines = read_data("data1.txt")
     for line in lines:
         execute_command(line)
-    print len(lights)
-
+    print sum(lights.values())
+    
 if __name__ == "__main__":
     main()
     
